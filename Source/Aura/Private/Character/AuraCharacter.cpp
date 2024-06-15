@@ -1,7 +1,8 @@
 // Copyright Druid Mechanics
 
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Character/AuraCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 AAuraCharacter::AAuraCharacter()
 {
