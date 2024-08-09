@@ -8,7 +8,10 @@
 #include "GameplayTagContainer.h"
 #include "OverlayWidgetController.generated.h"
 
-
+/*
+*    Overlay Widget Controller is Getting Attribute changes, and changing the values through delegates.
+*
+*/
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, NewHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature, float, NewMana);
@@ -66,4 +69,15 @@ protected:
 	void ManaChanged(const FOnAttributeChangeData& Data) const;
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
 
+	template<typename T>
+	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
+
 };
+
+template<typename T>
+inline T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
+{
+
+	return  DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
+
+}
