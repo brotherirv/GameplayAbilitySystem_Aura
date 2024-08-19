@@ -137,9 +137,6 @@ public:
 	FGameplayAttributeData ManaRegeneration;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ManaRegeneration);
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArmorPenetration, Category = "Secondary Attributes")
-	FGameplayAttributeData ArmorPenetration;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ArmorPenetration);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Secondary Attributes")
 	FGameplayAttributeData Mana;
