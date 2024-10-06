@@ -6,11 +6,25 @@
 #include "Gameframework/Character.h"
 #include "GameplayEffectExtension.h"
 #include <Net/UnrealNetwork.h>
+#include "AuraGameplayTags.h"
 #include <AbilitySystemBlueprintLibrary.h>
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
 
+	//Manually adding our Gameplay Tags inside of our TMAP called TagsToAttributes
+	//FAttributeSignature StrengthDelegate;
+	//StrengthDelegate.BindStatic(GetStrengthAttribute);
+	//TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, StrengthDelegate);
+
+
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength, GetStrengthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence, GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Resilience, GetResilienceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Vigor, GetVigorAttribute);
+
+	
 
 }
 
