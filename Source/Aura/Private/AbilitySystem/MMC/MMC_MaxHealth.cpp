@@ -1,8 +1,8 @@
 // Copyright Druid Mechanics
 
+#include "AbilitySystem/MMC/MMC_MaxHealth.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "GameplayEffectExtension.h"
-#include "AbilitySystem/MMC/MMC_MaxHealth.h"
 #include "Interaction/CombatInterface.h"
 #include <Character/AuraCharacterBase.h>
 
