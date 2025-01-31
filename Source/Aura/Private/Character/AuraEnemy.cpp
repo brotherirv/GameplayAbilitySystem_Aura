@@ -55,4 +55,6 @@ void AAuraEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	//Set Enemy Attributes on blueprints
+	InitializeDefaultAttributes();
 }
