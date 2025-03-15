@@ -8,6 +8,7 @@
 
 class UGameplayEffect;
 class UGameplayAbility;
+class UCurveTable;
 
 UENUM(BlueprintType)
 enum class ECharacterClass : uint8
@@ -23,7 +24,7 @@ struct FCharacterClassDefaultInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
-	TSubclassOf <UGameplayEffect> PrimaryAttributes;
+	TSubclassOf<UGameplayEffect> PrimaryAttributes;
 
 };
 
