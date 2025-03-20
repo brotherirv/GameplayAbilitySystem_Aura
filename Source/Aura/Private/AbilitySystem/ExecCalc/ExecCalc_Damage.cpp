@@ -123,6 +123,7 @@ UExecCalc_Damage::UExecCalc_Damage()
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
+	//Gets Source and Target components
 	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 
@@ -133,9 +134,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
 
 
-
+	//Gets effect details
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
+	//Gets effect detail of Source and target
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 	FAggregatorEvaluateParameters EvaluationParameters;
@@ -145,6 +147,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//Get Damage Set by Caller Magnitude
 
 	float Damage = 0.f;
+
+	/*
+	* for loop will run everything inside of the DamageTypesToResistances, which is mapped out in AuraGameplay Tags
+	* Tuple holds two values. Key is the first input, Value is the second.
+	* 
+	*/
 	for (const TTuple<FGameplayTag, FGameplayTag>& Pair : FAuraGameplayTags::Get().DamageTypesToResistances)
 	{
 
@@ -157,6 +165,13 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 		float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
 
 		float Resistance = 0.f;
+		/*
+		* Execution Params contains all the data for the ExecutionCalculation (Source/Target Info)
+		* AttemptCalculateCapturedAttributeMagnitude retieves Resistance from the Target
+		* Capture Def Identifies which attribute to retrieve 
+		* Evaluation Parameters holds tags for the Source and target
+		* Resistance is where the value will be stored
+		*/
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDef, EvaluationParameters, Resistance);
 		Resistance = FMath::Clamp(Resistance, 0.f, 100.f);
 
