@@ -36,9 +36,28 @@ void AAuraEnemy::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	if (!HasAuthority()) return;
-	AuraAIController = Cast<AAuraAIController>(NewController);
 
-	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	AuraAIController = Cast<AAuraAIController>(NewController);
+	if (!AuraAIController)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AuraEnemy: AuraAIController is null in PossessedBy"));
+		return;
+	}
+
+	if (!BehaviorTree || !BehaviorTree->BlackboardAsset)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AuraEnemy: BehaviorTree or its BlackboardAsset is null in PossessedBy"));
+		return;
+	}
+
+	UBlackboardComponent* BlackboardComp = AuraAIController->GetBlackboardComponent();
+	if (!BlackboardComp)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AuraEnemy: BlackboardComponent is null in PossessedBy"));
+		return;
+	}
+
+	BlackboardComp->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	AuraAIController->RunBehaviorTree(BehaviorTree);
 }
 
