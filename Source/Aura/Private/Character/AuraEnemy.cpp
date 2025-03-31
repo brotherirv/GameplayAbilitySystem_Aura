@@ -8,6 +8,10 @@
 #include "Components/WidgetComponent.h"
 #include "AuraGameplayTags.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AI/AuraAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include <Aura/Aura.h>
 
 
@@ -20,10 +24,51 @@ AAuraEnemy::AAuraEnemy()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+
+}
+
+void AAuraEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority()) return;
+
+	AuraAIController = Cast<AAuraAIController>(NewController);
+	if (!AuraAIController)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AuraEnemy: AuraAIController is null in PossessedBy"));
+		return;
+	}
+
+	if (!BehaviorTree || !BehaviorTree->BlackboardAsset)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AuraEnemy: BehaviorTree or its BlackboardAsset is null in PossessedBy"));
+		return;
+	}
+
+	UBlackboardComponent* BlackboardComp = AuraAIController->GetBlackboardComponent();
+	if (!BlackboardComp)
+	{
+		UE_LOG(LogTemp, Error, TEXT("AuraEnemy: BlackboardComponent is null in PossessedBy"));
+		return;
+	}
+
+	BlackboardComp->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	AuraAIController->RunBehaviorTree(BehaviorTree);
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
+	
+
+	
 
 }
 
@@ -105,6 +150,9 @@ void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()-> MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
+	
+
 }
 
 void AAuraEnemy::InitAbilityActorInfo()

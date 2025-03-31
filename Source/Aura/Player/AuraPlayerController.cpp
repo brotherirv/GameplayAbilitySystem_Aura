@@ -2,7 +2,7 @@
 
 
 #include "AuraPlayerController.h"
-#include "../../../../../../../../../Program Files/Epic Games/UE_5.3/Engine/Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
+#include "EnhancedInputSubsystems.h"
 #include <Interaction/EnemyInterface.h>
 #include <Input/AuraInputComponent.h>
 #include "Components/SplineComponent.h"
@@ -158,8 +158,12 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 					{
 						Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
 					}
-					CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
-					bAutoRunning = true;
+					if (NavPath->PathPoints.Num() > 0)
+					{
+						CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
+						bAutoRunning = true;
+					}
+
 				}
 			}
 			FollowTime = 0.f;
