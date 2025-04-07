@@ -55,6 +55,8 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	
 	Dissolve();
 
+	bDead = true;
+
 }
 
 
@@ -70,6 +72,14 @@ FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation()
 {
 	check(Weapon);
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+bool AAuraCharacterBase::IsDead_Implementation() const
+{
+	return bDead;
+}
+AActor* AAuraCharacterBase::GetAvatar_Implementation() 
+{
+	return this;
 }
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
