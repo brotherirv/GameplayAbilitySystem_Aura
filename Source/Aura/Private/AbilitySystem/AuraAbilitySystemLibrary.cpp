@@ -146,6 +146,23 @@ void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldC
     }
 }
 
+bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
+{
+    //Checking to see if actors have tags
+    const bool bFirstIsPlayer = FirstActor->ActorHasTag(FName("Player"));
+    const bool bSecondIsPlayer = SecondActor->ActorHasTag(FName("Player"));
+    const bool bFirstIsEnemy = FirstActor->ActorHasTag(FName("Enemy"));
+    const bool bSecondIsEnemy = SecondActor->ActorHasTag(FName("Enemy"));
+
+    //Checking to see if both actors have same tag
+    const bool bBothArePlayers = bFirstIsPlayer && bSecondIsPlayer;
+    const bool bBothAreEnemies = bFirstIsEnemy && bSecondIsEnemy;
+    const bool bFriends = bBothArePlayers || bBothAreEnemies;
+
+    //If both return as friends, the function has to return IsNotFriend as false so it can mean true. Bad naming convention.
+    return !bFriends;
+}
+
 void UAuraAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
 {
     if (FAuraGameplayEffectContext* AuraEffectContext = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get()))
