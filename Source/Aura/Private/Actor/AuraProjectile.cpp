@@ -74,6 +74,7 @@ void AAuraProjectile::Destroyed()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("LoopingSoundComponent is NULL in AAuraProjectile::Destroyed!"));
 		}
+		bHit = true;
 	}
 	Super::Destroyed();
 }
@@ -96,6 +97,7 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 		{
 			LoopingSoundComponent->Stop();
 		}
+		bHit = true;
 	}
 
 
