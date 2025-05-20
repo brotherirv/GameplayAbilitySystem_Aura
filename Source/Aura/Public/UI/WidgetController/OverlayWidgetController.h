@@ -39,6 +39,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidge
 
 class UAbilityInfo;
 struct FOnAttributeChangeData;
+class UAuraAbilitySystemComponent;
 /**
  * 
  */
@@ -74,6 +75,8 @@ protected:
 
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
+
+	void OnInitializedStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent);
 
 };
 
