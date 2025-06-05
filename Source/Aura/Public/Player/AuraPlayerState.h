@@ -9,7 +9,7 @@
 #include "AuraPlayerState.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32, /*StatValue*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32);
 
 class UAbilitySystemComponent;
 class UAttributeSet;
